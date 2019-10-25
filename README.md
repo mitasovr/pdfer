@@ -1,7 +1,11 @@
-# pdfer setup
+# Setup
 
 `npm i`
 
-# pdfer usage
+# Usage
 
-`npm run pdf -- path/to/source/file path/to/destination/file`
+`npm run pdf -- path/to/source path/to/destination`
+
+or
+
+`node PATH/TO/PDFER/node_modules/ts-node/dist/bin.js PATH/TO/PDFER/src/pdfer.ts PATH/TO/SOURCE PATH/TO/DESTINATION`

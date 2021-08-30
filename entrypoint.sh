@@ -11,19 +11,9 @@ function DEBUG() {
 
 
 function main() {
-    shopt -s nullglob
-    FILES=${SHARED_DIR}/*.html
-
-    DEBUG echo "Converting all html files to pdf in ${SHARED_DIR}:"
-    DEBUG ls -A1 ${FILES}
-
-    for in_file in ${FILES}
-    do
-      out_file="${in_file%.*}.pdf"
-      cmd="${PDFER} -- ${in_file} ${out_file}"
-      DEBUG echo "${cmd}"
-      ${cmd}
-    done
+    cmd="${PDFER} -- ${SHARED_DIR}"
+    DEBUG echo "${cmd}"
+    ${cmd}
 }
 
 
@@ -37,10 +27,12 @@ NAME
        $0 - Entrypoint of pdfer
 
 SYNOPSIS
+       $0 [OPTION]... HTML FILE
        $0 [OPTION]... DIRECTORY
 
 DESCRIPTION:
-       Convert all html files to pdf in DIRECTORY
+       Convert html file to pdf
+       or all html files to pdf in DIRECTORY
 
        --debug turn on debug logging
 
@@ -52,14 +44,14 @@ EOF
 }
 
 
-if [ -x "$(command -v $1)" ]; then
+# check that contaner was run with command like /bin/bash
+# to enter inside container in interactive mode
+if [ -x "$(command -v $1 &> /dev/null)" ]; then
   echo 'First argument is executable, skipping entrypoint'
   exec $@
   exit 0
 fi
 
-
-SHARED_DIR=""
 
 while [ ! $# -eq 0 ]; do
     case "$1" in
@@ -83,10 +75,5 @@ done
 
 
 SHARED_DIR="$1"
-if [ ! -d "${SHARED_DIR}" ]; then
-    echo "Positional argument DIRECTORY should be an existing directory, received: \"${SHARED_DIR}\"" >&2
-    usage
-    exit 1
-fi
 
 main

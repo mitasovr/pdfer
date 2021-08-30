@@ -1,13 +1,17 @@
 import puppeteer from 'puppeteer'
+import fs from 'fs';
+import path from "path";
 
 import { pdfOptions } from '../pdf_options'
 
 
 // disable logging
-console.log = function() {}
+// console.log = function() {}
 console.log("Running pdfer.ts with arguments:", process.argv.slice(2));
 
 
+const RE_HtmlFileName = /^.*\.(html|htm)$/ig
+const RE_FileExtension = /\.[^/.]+$/
 let browser: puppeteer.Browser
 
 
@@ -32,8 +36,10 @@ async function finalize() {
   await browser.close()
 }
 
-async function convert (source: string, destination: string) {
+
+async function convert (source: string) {
   let page = await browser.newPage()
+  let destination = source.replace(RE_FileExtension, ".pdf")
 
   await page.goto(`file://${source}`);
   await page.pdf({
@@ -45,12 +51,36 @@ async function convert (source: string, destination: string) {
 }
 
 
+async function processDirectory(source: string) {
+  console.log(`Converting all html files in "${source}":`)
+  const dirContent = await fs.promises.opendir(source)
+
+  for await (const dirent of dirContent) {
+    if ( dirent.name.match(RE_HtmlFileName) ) {
+      console.log(`* Converting ${dirent.name}`)
+      await convert(path.join(source, dirent.name))
+    }
+  }
+}
+
 async function main () {
-  const [, , source, destination] = process.argv
-  console.log({source, destination})
+  const [, , source] = process.argv
+  console.log({source})
+
+  if ( ! fs.existsSync(source) ) {
+    console.error("Source folder/file is not exists")
+    process.exit(1)
+  }
 
   await init()
-  await convert(source, destination)
+
+  if (fs.lstatSync(source).isDirectory()) {
+    await processDirectory(source)
+  } else {
+    console.log(`Converting single html file: ${source}`)
+    await convert(source)
+  }
+
   await finalize()
 }
 

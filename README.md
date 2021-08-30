@@ -21,6 +21,8 @@ ls data/
 
 # Run converter over `data` directory to convert all html files to pdf
 docker run --rm -v $(pwd)/data:/data pdfer --debug /data
+# or to process single file
+docker run --rm -v $(pwd)/data:/data pdfer --debug /data/example.html
 
 # See the pdf that was generated
 ls data/

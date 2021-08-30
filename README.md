@@ -1,18 +1,29 @@
-# Setup
+# Docker Puppeteer Example
 
-`npm i`
+Html-pdf files converter based on Puppeteer docker image, resulted pdf files are placed in local `./data` directory.
 
-# Usage
+Note:
 
-`npm run pdf -- path/to/source path/to/destination`
+Css, images and static files can be used if properly referenced in html document: File [Uri Scheme and Relative Files](https://stackoverflow.com/questions/7857416/file-uri-scheme-and-relative-files)
 
-or
+## Running
 
-`node PATH/TO/PDFER/node_modules/ts-node/dist/bin.js PATH/TO/PDFER/src/pdfer.ts PATH/TO/SOURCE PATH/TO/DESTINATION`
+```shell
+# Clone
+git clone git@github.com:aimestereo/pdfer.git
+cd pdfer
 
-# Config
+# Build pdfer
+docker build . -t pdfer
 
-`./config.ts` exports `puppeteerConfig` object of `PDFOptions` type, thats the same as `page.pdf([options])`
+# check directory that has example data/example.html
+ls data/
 
-See Puppeteer [docs](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagepdfoptions)
+# Run converter over `data` directory to convert all html files to pdf
+docker run --rm -v $(pwd)/data:/data pdfer --debug /data
 
+# See the pdf that was generated
+ls data/
+```
+
+Note: it's possible to run locally without using docker but it's not recommended and you will need to install Puppeteer yourself.

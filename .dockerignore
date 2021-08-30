@@ -1,0 +1,9 @@
+.*
+!.coveragerc
+!.env
+!.pylintrc
+.git
+
+node_modules
+npm-debug
+data

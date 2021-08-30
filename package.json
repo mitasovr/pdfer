@@ -1,25 +1,10 @@
 {
-  "name": "pdfer",
-  "version": "1.0.0",
-  "description": "make pdf cli",
-  "main": "index.js",
-  "scripts": {
-    "pdf": "ts-node ./src/pdfer.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mitasovr/pdfer.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mitasovr/pdfer/issues"
-  },
-  "homepage": "https://github.com/mitasovr/pdfer#readme",
-  "dependencies": {
-    "@types/puppeteer": "^1.20.2",
-    "puppeteer": "^2.0.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
-  }
+    "scripts": {
+        "pdfer": "ts-node ./src/pdfer.ts"
+    },
+    "dependencies": {
+        "@types/puppeteer": "^5.4.4",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.4.2"
+    }
 }
